@@ -10,6 +10,8 @@
 
 @implementation UIColor (HBVHarmonies)
 
+#pragma mark - Public methods
+
 - (UIColor *)jitterWithPercent:(CGFloat)percent
 {
     UIColor *result = nil;
@@ -17,7 +19,7 @@
     for (NSInteger index = 0; index < 3; index ++) {
         CGFloat oldComponent = CGColorGetComponents(self.CGColor)[index];
         CGFloat random = ((CGFloat)arc4random_uniform(200) - 100.0f) * 0.01;
-        CGFloat newComponent = oldComponent + random * percent;
+        CGFloat newComponent = oldComponent + random * percent * 0.01;
         newComponents[index] = [UIColor clipValue:newComponent withMin:0 max:1.0f];
     }
     
@@ -53,6 +55,47 @@
     result = [UIColor colorWithRed:newComponents[0] green:newComponents[1] blue:newComponents[2] alpha:alpha];
     return result;
 }
+
+- (UIColor *)colorHarmonyWithExpressionOnComponents:(CGFloat*(^)(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha))componentsExpression;
+{
+    UIColor *result = nil;
+    CGFloat oldComponents[4];
+    for (NSInteger index = 0; index < 4; index ++) {
+        CGFloat oldComponent = CGColorGetComponents(self.CGColor)[index];
+        oldComponents[index] = oldComponent;
+    }
+    
+    CGFloat *expressionResult = malloc(sizeof(CGFloat) * 4);
+    expressionResult = componentsExpression(oldComponents[0],oldComponents[1],oldComponents[2],oldComponents[3]);
+    CGFloat newComponents[4];
+    for (NSInteger index = 0; index < 4; index ++) {
+        newComponents[index] = [UIColor clipValue:expressionResult[index] withMin:0.0 max:1.0];
+    }
+    
+    result = [UIColor colorWithRed:newComponents[0] green:newComponents[1] blue:newComponents[2] alpha:newComponents[3]];
+    return result;
+}
+
+- (UIColor *)colorHarmonyWithComponentArray:(NSArray*(^)(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha))componentsExpression
+{
+    UIColor *result = nil;
+    CGFloat oldComponents[4];
+    for (NSInteger index = 0; index < 4; index ++) {
+        CGFloat oldComponent = CGColorGetComponents(self.CGColor)[index];
+        oldComponents[index] = oldComponent;
+    }
+    
+    NSArray *expressionResult = componentsExpression(oldComponents[0],oldComponents[1],oldComponents[2],oldComponents[3]);
+    CGFloat newComponents[4];
+    for (NSInteger index = 0; index < expressionResult.count; index++) {
+        newComponents[index] = [expressionResult[index] doubleValue];
+    }
+    
+    result = [UIColor colorWithRed:newComponents[0] green:newComponents[1] blue:newComponents[2] alpha:newComponents[3]];
+    return result;
+}
+
+#pragma mark - Private methods
 
 + (CGFloat)clipValue:(CGFloat)value withMin:(CGFloat)min max:(CGFloat)max
 {
