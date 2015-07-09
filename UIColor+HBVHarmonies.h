@@ -28,4 +28,10 @@
 //Returns an instance of UIColor in which the caller's RGB components are jittered by a proportion (percent, range 0.0 - 100.0) of the caller's RGB component values.
 - (UIColor *)jitterWithPercent:(CGFloat)percent;
 
+//Blend evenly with another color
+- (UIColor *)blendWithColor:(UIColor *)color;
+
+//Blend with a weighted color (weight should be in the range 0.0 - 1.0)
+- (UIColor *)blendWithColor:(UIColor *)color weight:(CGFloat)weight;
+
 @end

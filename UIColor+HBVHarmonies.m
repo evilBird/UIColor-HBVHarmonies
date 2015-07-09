@@ -8,6 +8,14 @@
 
 #import "UIColor+HBVHarmonies.h"
 
+static void _getRGBA(UIColor *color, CGFloat rgba[])
+{
+    rgba[0] = CGColorGetComponents(color.CGColor)[0];
+    rgba[1] = CGColorGetComponents(color.CGColor)[1];
+    rgba[2] = CGColorGetComponents(color.CGColor)[2];
+    rgba[3] = CGColorGetComponents(color.CGColor)[3];
+}
+
 @implementation UIColor (HBVHarmonies)
 
 #pragma mark - Public methods
@@ -95,6 +103,28 @@
     return result;
 }
 
+- (UIColor *)blendWithColor:(UIColor *)color
+{
+    return [self blendWithColor:color weight:0.5];
+}
+
+- (UIColor *)blendWithColor:(UIColor *)color weight:(CGFloat)weight
+{
+    CGFloat myComponents[4];
+    CGFloat theirComponents[4];
+    CGFloat blendedComponents[4];
+    _getRGBA(self, myComponents);
+    _getRGBA(color, theirComponents);
+    blendedComponents[0] = (myComponents[0] * (1.0 - weight) + theirComponents[0] * weight);
+    blendedComponents[1] = (myComponents[1] * (1.0 - weight) + theirComponents[1] * weight);
+    blendedComponents[2] = (myComponents[2] * (1.0 - weight) + theirComponents[2] * weight);
+    blendedComponents[3] = (myComponents[3] * (1.0 - weight) + theirComponents[3] * weight);
+    
+    return [UIColor colorWithRed:blendedComponents[0] green:blendedComponents[1] blue:blendedComponents[2] alpha:blendedComponents[3]];
+
+}
+
+
 #pragma mark - Private methods
 
 + (CGFloat)clipValue:(CGFloat)value withMin:(CGFloat)min max:(CGFloat)max
@@ -109,5 +139,6 @@
     }
     return result;
 }
+
 
 @end
