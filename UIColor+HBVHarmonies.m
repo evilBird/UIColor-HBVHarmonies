@@ -35,6 +35,13 @@ static void _getRGBA(UIColor *color, CGFloat rgba[])
     return result;
 }
 
+- (UIColor *)setAlpha:(CGFloat)alpha
+{
+    CGFloat myComponents[4];
+    _getRGBA(self, myComponents);
+    return [UIColor colorWithRed:myComponents[0] green:myComponents[1] blue:myComponents[2] alpha:alpha];
+}
+
 - (UIColor *)complement
 {
     return [self colorHarmonyWithExpression:^CGFloat(CGFloat value) {
