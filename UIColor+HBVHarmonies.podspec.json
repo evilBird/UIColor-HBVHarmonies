@@ -1,0 +1,23 @@
+{
+  "name": "UIColor+HBVHarmonies",
+  "version": "0.0.1",
+  "summary": "Blocks-based UIColor category that makes creating color harmonies easy.",
+  "homepage": "https://github.com/evilBird/UIColor-HBVHarmonies",
+  "license": "MIT",
+  "authors": {
+    "evilBird": "developer@birdsoundmusic.com"
+  },
+  "source": {
+    "git": "https://github.com/evilBird/UIColor-HBVHarmonies.git",
+    "tag": "0.0.1"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source_files": "UIColor+HBVHarmonies*.{h,m}",
+  "frameworks": [
+	  "Foundation",
+	  "UIKit"
+  ],
+  "requires_arc": true
+}
